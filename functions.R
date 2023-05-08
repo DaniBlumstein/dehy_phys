@@ -120,7 +120,7 @@ bring_in_data <- function(data_file, Sex)
   
   #metric <- "corEE"
   target <- c(0,1,2,3,4,5)
-  cages <- raw %>% filter(Animal %in% target)
+  cages <- raw %>% filter(animal %in% target)
   
   
   #start_time <- ymd_hms(subset[[5]][1])
