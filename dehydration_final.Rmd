@@ -373,9 +373,9 @@ females_dehy <- females_dehy %>%
     animal== "0" ~ "yes",
     animal== "1" ~ "yes",
     animal== "2" ~ "yes",
+    animal== "3" ~ "no",
     animal== "4" ~ "no",
     animal== "5" ~ "no",
-    animal== "6" ~ "no",
     ))
 
 unique(males_dehy$animal)
@@ -384,9 +384,9 @@ males_dehy <- males_dehy %>%
     animal== "0" ~ "yes",
     animal== "1" ~ "yes",
     animal== "2" ~ "yes",
+    animal== "3" ~ "no",
     animal== "4" ~ "no",
     animal== "5" ~ "no",
-    animal== "6" ~ "no",
     ))
 
 ```
@@ -534,14 +534,14 @@ all_noOL$day_time <- days(all_noOL$day-1)+hours(split_data$X1)+minutes(split_dat
 all_noOL$time_in_S <- as.numeric(all_noOL$day_time)
 all_noOL$hour <- round(all_noOL$time_in_S/3600, digits=0)
 
-RQ <- ggplot(data = all_noOL,aes(color = as.factor(Animal_ID), x=as.numeric(day_time),y=RQ))+
+RQ <- ggplot(data = all_noOL,aes(color = tt, x=as.numeric(day_time),y=RQ))+
   annotate("rect", xmin = 76032, xmax = 107474, ymin = -Inf, ymax = Inf, fill="grey84") +
   annotate("rect", xmin = 162079, xmax = 194341, ymin = -Inf, ymax = Inf, fill="grey84") +
   annotate("rect", xmin = 249086, xmax = 280528, ymin = -Inf, ymax = Inf, fill="grey84") +
-  #scale_color_manual(values=cols, name = "Treatments") +
+  scale_color_manual(values=cols, name = "Treatments") +
   geom_point(alpha = .5)+
   theme_classic()+
-  geom_smooth(method='loess', span=.1, level=0.99)+
+  #geom_smooth(method='loess', span=.1, level=0.99)+
   guides(alpha = FALSE)+
   #theme(axis.text.y=element_text(size=12))+
   scale_x_time()+
@@ -552,28 +552,28 @@ RQ <- ggplot(data = all_noOL,aes(color = as.factor(Animal_ID), x=as.numeric(day_
   ylim(0.5, 1.5)
 
 
-EE <- ggplot(data = all_noOL,aes(color = as.factor(Animal_ID), x=as.numeric(day_time),y=EE_kJH))+
+EE <- ggplot(data = all_noOL,aes(color = tt, x=as.numeric(day_time),y=EE_kJH))+
  annotate("rect", xmin = 76032, xmax = 107474, ymin = -Inf, ymax = Inf, fill="grey84") +
   annotate("rect", xmin = 162079, xmax = 194341, ymin = -Inf, ymax = Inf, fill="grey84") +
   annotate("rect", xmin = 249086, xmax = 280528, ymin = -Inf, ymax = Inf, fill="grey84") +
-  #scale_color_manual(values=cols, name = "Treatments") +
+  scale_color_manual(values=cols, name = "Treatments") +
   geom_point(alpha = .5)+
   theme_classic()+
-  geom_smooth(method='loess', span=.1, level=0.99)+
+  #geom_smooth(method='loess', span=.1, level=0.99)+
   guides(alpha = FALSE)+
   #theme(axis.text.y=element_text(size=12))+
   scale_x_time()+
   facet_wrap(~Sex)+
   labs(x = "", y = "EE_kJH")
 
-H2Omg_plot <- ggplot(data = all_noOL,aes(color = as.factor(Animal_ID), x=as.numeric(day_time),y=H2Omg))+
+H2Omg_plot <- ggplot(data = all_noOL,aes(color = tt, x=as.numeric(day_time),y=H2Omg))+
   annotate("rect", xmin = 76032, xmax = 107474, ymin = -Inf, ymax = Inf, fill="grey84") +
   annotate("rect", xmin = 162079, xmax = 194341, ymin = -Inf, ymax = Inf, fill="grey84") +
   annotate("rect", xmin = 249086, xmax = 280528, ymin = -Inf, ymax = Inf, fill="grey84") +
-  #scale_color_manual(values=cols, name = "Treatments") +
+  scale_color_manual(values=cols, name = "Treatments") +
   geom_point(alpha = .5)+
   theme_classic()+
-  geom_smooth(method='loess', span=.1, level=0.99)+
+  #geom_smooth(method='loess', span=.1, level=0.99)+
   guides(alpha = FALSE)+
   #theme(axis.text.y=element_text(size=12))+
   scale_x_time()+
