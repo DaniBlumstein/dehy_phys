@@ -521,6 +521,11 @@ body_temp<- all_noOL %>% mutate(body_temp = coalesce(body_temp0, body_temp1, bod
 all_noOL["body_temp"] <- body_temp
 all_noOL = select(all_noOL, -weight_0, -weight_1, -weight_2, -weight_3, -body_temp0, -body_temp1, -body_temp2, -body_temp3)
 
+#note: H2Omg is mg h20 min-1
+#H2Og is g h2o h -1
+
+all_noOL$H2Og <- all_noOL$H2Omg * 0.06
+
 write.csv(all_noOL, "cages.csv", row.names=FALSE)
 ```
 
@@ -533,6 +538,16 @@ all_combo<-unique(all_noOL$tt)
 all_noOL$day_time <- days(all_noOL$day-1)+hours(split_data$X1)+minutes(split_data$X2)+seconds(split_data$X3)
 all_noOL$time_in_S <- as.numeric(all_noOL$day_time)
 all_noOL$hour <- round(all_noOL$time_in_S/3600, digits=0)
+
+all_noOL_clean <- all_noOL %>% 
+  separate(StartTime, into = c("Hour", "Minute", "Second"), sep = ":") %>% 
+  mutate(Day = day - 1) %>%
+  mutate(time_period = period(days = Day, hours = Hour, minutes = Minute, seconds = Second)) %>%
+  mutate(Hours = as.numeric(time_period)/3600) %>%
+  mutate(Date = as.POSIXct("2021-01-01") + time_period) %>%
+  select(Date, Day, Hour, Minute, Second, RQ, Sex, EE_kJH, H2Omg, tt)
+  
+
 
 RQ <- ggplot(data = all_noOL,aes(color = tt, x=as.numeric(day_time),y=RQ))+
   annotate("rect", xmin = 76032, xmax = 107474, ymin = -Inf, ymax = Inf, fill="grey84") +
@@ -564,21 +579,31 @@ EE <- ggplot(data = all_noOL,aes(color = tt, x=as.numeric(day_time),y=EE_kJH))+
   #theme(axis.text.y=element_text(size=12))+
   scale_x_time()+
   facet_wrap(~Sex)+
-  labs(x = "", y = "EE_kJH")
+  labs(x = "", y = "EE kJ h-1")
 
-H2Omg_plot <- ggplot(data = all_noOL,aes(color = tt, x=as.numeric(day_time),y=H2Omg))+
-  annotate("rect", xmin = 76032, xmax = 107474, ymin = -Inf, ymax = Inf, fill="grey84") +
-  annotate("rect", xmin = 162079, xmax = 194341, ymin = -Inf, ymax = Inf, fill="grey84") +
-  annotate("rect", xmin = 249086, xmax = 280528, ymin = -Inf, ymax = Inf, fill="grey84") +
+#scale_x_datetime(date_labels = "Day %d \n Hour: %H", date_breaks = "6 hours") +
+
+H2Omg_plot <- ggplot(data = all_noOL_clean,aes(color = tt, x=Date,y=H2Og))+
+  annotate("rect", xmin = as.POSIXct("2021-01-01 21:00:00", tz="UTC"),
+           xmax = as.POSIXct("2021-01-02 06:00:00", tz="UTC"),
+           ymin = -Inf, ymax = Inf, fill="grey84") +
+  annotate("rect", xmin = as.POSIXct("2021-01-02 21:00:00", tz="UTC"),
+           xmax = as.POSIXct("2021-01-03 06:00:00", tz="UTC"),ymin = -Inf, 
+           ymax = Inf, fill="grey84") +
+  annotate("rect", xmin = as.POSIXct("2021-01-03 21:00:00", tz="UTC"),
+           xmax = as.POSIXct("2021-01-04 06:00:00", tz="UTC"),ymin = -Inf, 
+           ymax = Inf, fill="grey84") +
+  scale_x_datetime(date_labels = "%H", date_breaks = "4 hours") +
   scale_color_manual(values=cols, name = "Treatments") +
   geom_point(alpha = .5)+
   theme_classic()+
   #geom_smooth(method='loess', span=.1, level=0.99)+
   guides(alpha = FALSE)+
   #theme(axis.text.y=element_text(size=12))+
-  scale_x_time()+
   facet_wrap(~Sex)+
-  labs(x = "", y = "RWL")
+  labs(x = "", y = "RWL g h-1")
+
+
 
 mean_EE <- ggline(all_noOL, x = "hour", y = "EE_kJH", add = "mean_se",color = "H2O", facet.by = "Sex")+
   stat_compare_means(aes(group = H2O), label = "p.signif",hide.ns = TRUE,label.y = 1)+
@@ -586,7 +611,7 @@ mean_EE <- ggline(all_noOL, x = "hour", y = "EE_kJH", add = "mean_se",color = "H
   labs(y = "mean EE_kJH0")+
   scale_x_discrete(breaks=seq(0, 100, 5))
 
-mean_water <- ggline(all_noOL, x = "hour", y = "H2Omg", add = "mean_se",color = "H2O", facet.by = "Sex")+
+mean_water <- ggline(all_noOL, x = "hour", y = "H2Og", add = "mean_se",color = "H2O", facet.by = "Sex")+
   stat_compare_means(aes(group = H2O), label = "p.signif",hide.ns = TRUE,label.y = 5.8)+
   scale_color_manual(values=c("firebrick","grey50")) +
   labs(y = "mean H2Omg")+
@@ -749,7 +774,7 @@ RQ <- ggplot(data = all_noOL %>% filter(H2O == "yes"), aes(x=as.POSIXct(StartTim
   facet_wrap(~Sex)+
   scale_colour_manual(name="Dehydration",values=cols2)
 
-water <- ggplot(data = all_noOL %>% filter(H2O == "yes"), aes(x=as.POSIXct(StartTime),y=H2Omg))+
+water <- ggplot(data = all_noOL %>% filter(H2O == "yes"), aes(x=as.POSIXct(StartTime),y=H2Og))+
   scale_x_datetime(date_breaks = "2 hours", date_labels = "%H:%M")+
   annotate("rect", xmin = as.POSIXct("1970-01-01 00:00:01", tz="UTC"), 
            xmax = as.POSIXct("1970-01-01 06:00:00", tz="UTC"), 
@@ -835,9 +860,9 @@ all_combo<-unique(dd$tt)
 ```
 
 ```{r}
-M2_v1 <- bam(H2Omg ~ H2O * Sex + s(days, by=tt, bs='cc',k=20)  + s(time_in_D,by=tt, bs="cr",k=40), data = dd, random = list(startexp = ~1, Animal_ID = ~1|startexp), method="REML")
+M2_v1 <- bam(H2Og ~ H2O * Sex + s(days, by=tt, bs='cc',k=20)  + s(time_in_D,by=tt, bs="cr",k=40), data = dd, random = list(startexp = ~1, Animal_ID = ~1|startexp), method="REML")
 
-M2_v2 <- bam(H2Omg ~ H2O * Sex + s(days, time_in_D, by=tt,k=70), data = dd, random = list(startexp = ~1, Animal_ID = ~1|startexp), method="REML")
+M2_v2 <- bam(H2Og ~ H2O * Sex + s(days, time_in_D, by=tt,k=70), data = dd, random = list(startexp = ~1, Animal_ID = ~1|startexp), method="REML")
 
 AIC(M2_v1, M2_v2)
 
