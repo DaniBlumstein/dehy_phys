@@ -7,6 +7,7 @@ output: html_document
 
 ```{r}
 setwd("~/Documents/UNH/metabolic chamber/dehydration")
+source("functions.R")
 ```
 
 bring in libs
@@ -34,7 +35,7 @@ import data
 electrolyte and weight data
 and path to files. this should be one of the only things edited for now 
 ```{r}
-cols <- c("yes:Male"="#59859F","no:Male"="#9D5933","yes:Female"="#784C85", "no:Female"="#DB903E")
+cols <- c("yes:Male"="#0C62AF","no:Male"="#822B0F","yes:Female"="#0C62AF", "no:Female"="#822B0F")
 
 path <- "respo_data/"
 dehydration_data <- read.csv("~/Documents/UNH/metabolic chamber/dehydration/dehydration_data.csv")
@@ -68,7 +69,6 @@ plist_electro <- list()
 
 all_electro_T <- melt(electrolyte_data_diet_select, id.vars = c("H2O","sex", "tt"), variable.name = "electro")
 
-
 my_comparisons <- list( c("yes:Male", "no:Male"), c("yes:Female", "no:Female"), c("yes:Male", "yes:Female"), c("no:Male", "no:Female"))
 
 all_electro_s <- subset(all_electro_T, all_electro_T$electro == "Na")
@@ -85,7 +85,7 @@ plist_electro[["Na"]] <-all_electro_s %>%
   ylab("mmol/L")+
   ggtitle("Na")+
   expand_limits(y=c(NA, ylim+2))
-save("Na", 13,10, plist_electro[["Na"]])
+#save("Na", 13,10, plist_electro[["Na"]])
 
 all_electro_s <- subset(all_electro_T, all_electro_T$electro == "K")
 ylim <- max(all_electro_s$value, na.rm = TRUE)
@@ -100,23 +100,23 @@ plist_electro[["K"]] <-all_electro_s %>%
   xlab("")+
   ylab("mmol/L")+
   ggtitle("K")
-save("K", 13,10, plist_electro[["K"]])
+#save("K", 13,10, plist_electro[["K"]])
 
-all_electro_s <- subset(all_electro_T, all_electro_T$electro == "Crea")
-ylim <- .207
-plist_electro[["Crea"]] <-all_electro_s %>%
-  ggplot(aes(x=tt, y=value, fill=tt),na.rm = FALSE) +
-  geom_violin(width=1, size=0.5, alpha = 0.8) +
-  stat_compare_means(comparisons = my_comparisons)+
-  scale_fill_manual(values=cols, name = "Treatments")+
-  geom_sina(alpha=0.5)+
-  theme_classic()+
-  theme(legend.position = "none", plot.title = element_text(face = "bold", size = (15),hjust = 0.5)) +
-  xlab("")+
-  ylab("umol/L")+
-  scale_y_continuous(labels = scales::number_format(accuracy = 0.01))+
-  ggtitle("Crea")
-save("Crea", 13,10, plist_electro[["Crea"]])
+#all_electro_s <- subset(all_electro_T, all_electro_T$electro == "Crea")
+#ylim <- .207
+#plist_electro[["Crea"]] <-all_electro_s %>%
+#  ggplot(aes(x=tt, y=value, fill=tt),na.rm = FALSE) +
+#  geom_violin(width=1, size=0.5, alpha = 0.8) +
+#  stat_compare_means(comparisons = my_comparisons)+
+#  scale_fill_manual(values=cols, name = "Treatments")+
+#  geom_sina(alpha=0.5)+
+#  theme_classic()+
+#  theme(legend.position = "none", plot.title = element_text(face = "bold", size = #(15),hjust = 0.5)) +
+#  xlab("")+
+#  ylab("umol/L")+
+#  scale_y_continuous(labels = scales::number_format(accuracy = 0.01))+
+#  ggtitle("Crea")
+#save("Crea", 13,10, plist_electro[["Crea"]])
 
 all_electro_s <- subset(all_electro_T, all_electro_T$electro == "BUN")
 ylim <- max(all_electro_s$value, na.rm = TRUE)
@@ -131,7 +131,7 @@ plist_electro[["BUN"]] <-all_electro_s %>%
   xlab("")+
   ylab("mmol/L")+
   ggtitle("BUN")
-save("BUN", 13,10, plist_electro[["BUN"]])
+#save("BUN", 13,10, plist_electro[["BUN"]])
 
 all_electro_s <- subset(all_electro_T, all_electro_T$electro == "Hct")
 ylim <- max(all_electro_s$value, na.rm = TRUE)
@@ -146,7 +146,7 @@ plist_electro[["Hct"]] <-all_electro_s %>%
   ggtitle("Hct")+
   xlab("")+
   ylab("% PCV")
-save("Hct", 13,10, plist_electro[["Hct"]])
+#save("Hct", 13,10, plist_electro[["Hct"]])
 
 all_electro_s <- subset(all_electro_T, all_electro_T$electro == "iCa")
 ylim <- max(all_electro_s$value, na.rm = TRUE)
@@ -161,7 +161,7 @@ plist_electro[["iCa"]] <-all_electro_s %>%
   xlab("")+
   ggtitle("iCa")+
   ylab("mmol/L")
-save("iCa", 13,10, plist_electro[["iCa"]])
+#save("iCa", 13,10, plist_electro[["iCa"]])
 
 all_electro_s <- subset(all_electro_T, all_electro_T$electro == "Glu")
 ylim <- max(all_electro_s$value, na.rm = TRUE)
@@ -176,7 +176,7 @@ plist_electro[["Glu"]] <-all_electro_s %>%
   xlab("")+
   ggtitle("Glu")+
   ylab("mmol/L")
-save("Glu", 13,10, plist_electro[["Glu"]])
+#save("Glu", 13,10, plist_electro[["Glu"]])
 
 all_electro_s <- subset(all_electro_T, all_electro_T$electro == "osmolality")
 ylim <- max(all_electro_s$value, na.rm = TRUE)
@@ -191,7 +191,7 @@ plist_electro[["osmolality"]] <-all_electro_s %>%
   xlab("")+
   ggtitle("osmolality")+
   ylab("mmol/L")
-save("osmolality", 13,10, plist_electro[["osmolality"]])
+#save("osmolality", 13,10, plist_electro[["osmolality"]])
 
 all_electro_s <- subset(all_electro_T, all_electro_T$electro == "Hb")
 ylim <- max(all_electro_s$value, na.rm = TRUE)
@@ -206,7 +206,7 @@ plist_electro[["Hb"]] <-all_electro_s %>%
   xlab("")+
   ggtitle("Hb")+
   ylab("mmol/L")
-save("Hb", 13,10, plist_electro[["Hb"]])
+#save("Hb", 13,10, plist_electro[["Hb"]])
 
 all_electro_s <- subset(all_electro_T, all_electro_T$electro == "Cl")
 ylim <- max(all_electro_s$value, na.rm = TRUE)
@@ -221,7 +221,7 @@ plist_electro[["Cl"]] <-all_electro_s %>%
   xlab("")+
   ggtitle("Cl")+
   ylab("mmol/L")
-save("Cl", 13,10, plist_electro[["Cl"]])
+#save("Cl", 13,10, plist_electro[["Cl"]])
 
 all_electro_s <- subset(all_electro_T, all_electro_T$electro == "TCO2")
 ylim <- max(all_electro_s$value, na.rm = TRUE)
@@ -236,7 +236,7 @@ plist_electro[["TCO2"]] <-all_electro_s %>%
   xlab("")+
   ggtitle("TCO2")+
   ylab("mmol/L")
-save("TCO2", 13,10, plist_electro[["TCO2"]])
+#save("TCO2", 13,10, plist_electro[["TCO2"]])
 
 all_electro_s <- subset(all_electro_T, all_electro_T$electro == "AnGap")
 ylim <- max(all_electro_s$value, na.rm = TRUE)
@@ -251,10 +251,10 @@ plist_electro[["AnGap"]] <-all_electro_s %>%
   xlab("")+
   ggtitle("AnGap")+
   ylab("mmol/L")
-save("AnGap", 13,10, plist_electro[["AnGap"]])
+#save("AnGap", 13,10, plist_electro[["AnGap"]])
 
-subset_thing_S <- all_electro_s %>% filter(sex == "F", H2O == "Standard")
-subset_thing_L <- all_electro_s %>% filter(sex == "F", H2O == "Low Fat")
+#subset_thing_S <- all_electro_s %>% filter(sex == "F", H2O == "Standard")
+#subset_thing_L <- all_electro_s %>% filter(sex == "F", H2O == "Low Fat")
 
 #mean(subset_thing$value, na.rm = TRUE)
 #sd(subset_thing$value, na.rm = TRUE)
@@ -262,13 +262,10 @@ subset_thing_L <- all_electro_s %>% filter(sex == "F", H2O == "Low Fat")
 #t.test(subset_thing_S$value, subset_thing_L$value)
 
 electo_plots <- gridExtra::grid.arrange(grobs = plist_electro, nrow=3, ncol=4)
-save("electo_plots", 35,30, electo_plots)
+save("electo_plots", 40,30, electo_plots)
 ```
-
-
-```{r}
-source("functions.R")
-```
+baseline <- interval(water_removal - days(3), water_removal)
+cages26july$experiment_day[cages26july$DateTime %within% baseline == "TRUE"] <- "baseline"
 
 dehydration females rep 1
 ```{r}
@@ -276,9 +273,23 @@ startdate =  as.Date("July-26-21", format = "%b-%d-%y")
 weight_ID("26-July-21")
 cages26july <- bring_in_data("26July21.csv", "Female")
 
+cages26july$DateTime <- as_datetime(cages26july$DateTime)
 
 dates <- unique(cages26july$StartDate)
 cages26july$day <- match(cages26july$StartDate, dates)
+
+water_removal <- ymd_hms("2021-07-26 10:30:59")
+day1 <- interval(water_removal, water_removal + days(1))
+day2 <- interval(water_removal + days(1), water_removal + days(2))
+day3 <- interval(water_removal + days(2), water_removal + days(3))
+
+cages26july <- cages26july %>%
+    add_column(experiment_day = NA)
+
+cages26july$experiment_day[cages26july$DateTime %within% day1 == "TRUE"] <- "day 1 no water"
+cages26july$experiment_day[cages26july$DateTime %within% day2 == "TRUE"] <- "day 2 no water"
+cages26july$experiment_day[cages26july$DateTime %within% day3 == "TRUE"] <- "day 3 no water"
+
 
 ggplot(cages26july, aes(as.POSIXct(with(cages26july, StartDate + hms(StartTime))),y=Deg_C))+
   scale_x_datetime(date_breaks = "2 hours", date_labels = "%H:%M")+
@@ -292,8 +303,22 @@ startdate =  as.Date("Aug-3-21", format = "%b-%d-%y")
 weight_ID("3-Aug-21")
 cages03Aug <- bring_in_data("03Aug21.csv", "Female")
 
+cages03Aug$DateTime <- as_datetime(cages03Aug$DateTime)
+
 dates <- unique(cages03Aug$StartDate)
 cages03Aug$day <- match(cages03Aug$StartDate, dates)
+
+water_removal <- ymd_hms("2021-08-03 10:30:59")
+day1 <- interval(water_removal, water_removal + days(1))
+day2 <- interval(water_removal + days(1), water_removal + days(2))
+day3 <- interval(water_removal + days(2), water_removal + days(3))
+
+cages03Aug <- cages03Aug %>%
+    add_column(experiment_day = NA)
+
+cages03Aug$experiment_day[cages03Aug$DateTime %within% day1 == "TRUE"] <- "day 1 no water"
+cages03Aug$experiment_day[cages03Aug$DateTime %within% day2 == "TRUE"] <- "day 2 no water"
+cages03Aug$experiment_day[cages03Aug$DateTime %within% day3 == "TRUE"] <- "day 3 no water"
 
 ggplot(cages03Aug, aes(as.POSIXct(with(cages03Aug, StartDate + hms(StartTime))),y=Deg_C))+
   scale_x_datetime(date_breaks = "2 hours", date_labels = "%H:%M")+
@@ -306,10 +331,23 @@ dehydration females rep 3
 startdate =  as.Date("Aug-9-21", format = "%b-%d-%y")
 weight_ID("9-Aug-21")
 cages09Aug <- bring_in_data("09Aug21.csv", "Female")
-unique(cages09Aug$Animal_ID)
+
+cages09Aug$DateTime <- as_datetime(cages09Aug$DateTime)
 
 dates <- unique(cages09Aug$StartDate)
 cages09Aug$day <- match(cages09Aug$StartDate, dates)
+
+water_removal <- ymd_hms("2021-08-09 10:30:59")
+day1 <- interval(water_removal, water_removal + days(1))
+day2 <- interval(water_removal + days(1), water_removal + days(2))
+day3 <- interval(water_removal + days(2), water_removal + days(3))
+
+cages09Aug <- cages09Aug %>%
+    add_column(experiment_day = NA)
+
+cages09Aug$experiment_day[cages09Aug$DateTime %within% day1 == "TRUE"] <- "day 1 no water"
+cages09Aug$experiment_day[cages09Aug$DateTime %within% day2 == "TRUE"] <- "day 2 no water"
+cages09Aug$experiment_day[cages09Aug$DateTime %within% day3 == "TRUE"] <- "day 3 no water"
 
 ggplot(cages09Aug, aes(as.POSIXct(with(cages09Aug, StartDate + hms(StartTime))),y=Deg_C))+
   scale_x_datetime(date_breaks = "2 hours", date_labels = "%H:%M")+
@@ -322,8 +360,22 @@ startdate =  as.Date("Sep-13-21", format = "%b-%d-%y")
 weight_ID("13-Sep-21")
 cages13Sep <- bring_in_data("13Sep21.csv", "Male")
 
+cages13Sep$DateTime <- as_datetime(cages13Sep$DateTime)
+
 dates <- unique(cages13Sep$StartDate)
 cages13Sep$day <- match(cages13Sep$StartDate, dates)
+
+water_removal <- ymd_hms("2021-09-13 10:30:59")
+day1 <- interval(water_removal, water_removal + days(1))
+day2 <- interval(water_removal + days(1), water_removal + days(2))
+day3 <- interval(water_removal + days(2), water_removal + days(3))
+
+cages13Sep <- cages13Sep %>%
+    add_column(experiment_day = NA)
+
+cages13Sep$experiment_day[cages13Sep$DateTime %within% day1 == "TRUE"] <- "day 1 no water"
+cages13Sep$experiment_day[cages13Sep$DateTime %within% day2 == "TRUE"] <- "day 2 no water"
+cages13Sep$experiment_day[cages13Sep$DateTime %within% day3 == "TRUE"] <- "day 3 no water"
 
 ggplot(cages13Sep, aes(as.POSIXct(with(cages13Sep, StartDate + hms(StartTime))),y=Deg_C))+
   scale_x_datetime(date_breaks = "2 hours", date_labels = "%H:%M")+
@@ -336,8 +388,22 @@ startdate =  as.Date("Sep-20-21", format = "%b-%d-%y")
 weight_ID("20-Sep-21")
 cages20Sep <- bring_in_data("20Sep21.csv", "Male")
 
+cages20Sep$DateTime <- as_datetime(cages20Sep$DateTime)
+
 dates <- unique(cages20Sep$StartDate)
 cages20Sep$day <- match(cages20Sep$StartDate, dates)
+
+water_removal <- ymd_hms("2021-09-20 10:30:59")
+day1 <- interval(water_removal, water_removal + days(1))
+day2 <- interval(water_removal + days(1), water_removal + days(2))
+day3 <- interval(water_removal + days(2), water_removal + days(3))
+
+cages20Sep <- cages20Sep %>%
+    add_column(experiment_day = NA)
+
+cages20Sep$experiment_day[cages20Sep$DateTime %within% day1 == "TRUE"] <- "day 1 no water"
+cages20Sep$experiment_day[cages20Sep$DateTime %within% day2 == "TRUE"] <- "day 2 no water"
+cages20Sep$experiment_day[cages20Sep$DateTime %within% day3 == "TRUE"] <- "day 3 no water"
 
 ggplot(cages20Sep, aes(as.POSIXct(with(cages20Sep, StartDate + hms(StartTime))),y=Deg_C))+
   scale_x_datetime(date_breaks = "2 hours", date_labels = "%H:%M")+
@@ -350,8 +416,22 @@ startdate =  as.Date("Sep-27-21", format = "%b-%d-%y")
 weight_ID("27-Sep-21")
 cages27Sep <- bring_in_data("27Sep21.csv", "Male")
 
+cages27Sep$DateTime <- as_datetime(cages27Sep$DateTime)
+
 dates <- unique(cages27Sep$StartDate)
 cages27Sep$day <- match(cages27Sep$StartDate, dates)
+
+water_removal <- ymd_hms("2021-09-27 10:30:59")
+day1 <- interval(water_removal, water_removal + days(1))
+day2 <- interval(water_removal + days(1), water_removal + days(2))
+day3 <- interval(water_removal + days(2), water_removal + days(3))
+
+cages27Sep <- cages27Sep %>%
+    add_column(experiment_day = NA)
+
+cages27Sep$experiment_day[cages27Sep$DateTime %within% day1 == "TRUE"] <- "day 1 no water"
+cages27Sep$experiment_day[cages27Sep$DateTime %within% day2 == "TRUE"] <- "day 2 no water"
+cages27Sep$experiment_day[cages27Sep$DateTime %within% day3 == "TRUE"] <- "day 3 no water"
 
 ggplot(cages27Sep, aes(as.POSIXct(with(cages27Sep, StartDate + hms(StartTime))),y=Deg_C))+
   scale_x_datetime(date_breaks = "2 hours", date_labels = "%H:%M")+
@@ -388,7 +468,6 @@ males_dehy <- males_dehy %>%
     animal== "4" ~ "no",
     animal== "5" ~ "no",
     ))
-
 ```
 
 
@@ -436,8 +515,6 @@ males_dehy_t1$interval <- "T1"
 
 males_dehy_t2 = all_M[all_M$time_in_S %in% t2_interval, ]
 males_dehy_t2$interval <- "T2"
-
-
 
 all_F <- rbind(females_dehy_day,females_dehy_night,females_dehy_t1,females_dehy_t2)
 
@@ -521,6 +598,8 @@ body_temp<- all_noOL %>% mutate(body_temp = coalesce(body_temp0, body_temp1, bod
 all_noOL["body_temp"] <- body_temp
 all_noOL = select(all_noOL, -weight_0, -weight_1, -weight_2, -weight_3, -body_temp0, -body_temp1, -body_temp2, -body_temp3)
 
+all_noOL$experiment_day[all_noOL$H2O == 'yes'] <- "yes water"
+
 #note: H2Omg is mg h20 min-1
 #H2Og is g h2o h -1
 
@@ -529,26 +608,198 @@ all_noOL$H2Og <- all_noOL$H2Omg * 0.06
 write.csv(all_noOL, "cages.csv", row.names=FALSE)
 ```
 
+ANCOVA
 ```{r}
-split_data <- data.frame(do.call('rbind', strsplit(as.character(all_noOL$StartTime),':',fixed=TRUE)))
-all_noOL <- all_noOL |>
-    mutate(tt = fct_cross(H2O, Sex))
-all_combo<-unique(all_noOL$tt)
+all_noOL$day <- as.factor(all_noOL$day)
+cols2 <- c("Baseline"="#0C62AF","1"="#CD622E","2"="#CD422E", "3"="#822B0F", "4"="#5C0001")
 
-all_noOL$day_time <- days(all_noOL$day-1)+hours(split_data$X1)+minutes(split_data$X2)+seconds(split_data$X3)
-all_noOL$time_in_S <- as.numeric(all_noOL$day_time)
+all_noOL <- na.omit(all_noOL)
+
+water <- ggplot(data = all_noOL %>% filter(H2O == "yes"), aes(x=as.POSIXct(StartTime),y=H2Og))+
+  scale_x_datetime(date_breaks = "3 hours", date_labels = "%H:%M")+
+  annotate("rect", xmin = as.POSIXct("1970-01-01 00:00:01", tz="UTC"), 
+           xmax = as.POSIXct("1970-01-01 06:00:00", tz="UTC"), 
+           ymin = -Inf, ymax = Inf, fill="grey84") +
+  annotate("rect", xmin = as.POSIXct("1970-01-01 21:00:00", tz="UTC"), 
+           xmax = as.POSIXct("1970-01-01 23:59:59", tz="UTC"), 
+           ymin = -Inf, ymax = Inf, fill="grey84") +
+  geom_point(all_noOL %>% filter(H2O == "yes"), mapping = aes(color="Baseline"), alpha=.3, size=1)+
+  geom_point(all_noOL %>% filter(H2O == "no", day == 1), mapping = aes(color="1"), alpha=.3, size=1)+
+  geom_point(all_noOL %>% filter(H2O == "no", day == 2), mapping = aes(color="2"), alpha=.3, size=1)+
+  geom_point(all_noOL %>% filter(H2O == "no", day == 3), mapping = aes(color="3"), alpha=.3, size=1)+
+  geom_point(all_noOL %>% filter(H2O == "no", day == 4), mapping = aes(color="4"), alpha=.3, size=1)+
+  geom_smooth(method='gam',se = FALSE, all_noOL %>% filter(H2O == "yes"), mapping = aes(color="Baseline"))+
+  geom_smooth(method='gam',se = FALSE, all_noOL %>% filter(H2O == "no", day == 1), mapping = aes(color="1"))+
+  geom_smooth(method='gam',se = FALSE, all_noOL %>% filter(H2O == "no", day == 2), mapping = aes(color="2"))+
+  geom_smooth(method='gam',se = FALSE, all_noOL %>% filter(H2O == "no", day == 3), mapping = aes(color="3"))+
+  geom_smooth(method='gam',se = FALSE, all_noOL %>% filter(H2O == "no", day == 4), mapping = aes(color="4"))+
+  labs(x = "", y = bquote("RWL g h"^-1))+
+  guides(alpha = "none")+
+  facet_wrap(~Sex)+
+  theme_minimal()+
+  scale_colour_manual(name="experiment day",values=cols2)
+
+water
+save("water1",25, 10, water)
+
+EE <- ggplot(data = all_noOL %>% filter(H2O == "yes"), aes(x=as.POSIXct(StartTime),y=EE_kJH))+
+  scale_x_datetime(date_breaks = "3 hours", date_labels = "%H:%M")+
+  annotate("rect", xmin = as.POSIXct("1970-01-01 00:00:01", tz="UTC"), 
+           xmax = as.POSIXct("1970-01-01 06:00:00", tz="UTC"), 
+           ymin = -Inf, ymax = Inf, fill="grey84") +
+  annotate("rect", xmin = as.POSIXct("1970-01-01 21:00:00", tz="UTC"), 
+           xmax = as.POSIXct("1970-01-01 23:59:59", tz="UTC"), 
+           ymin = -Inf, ymax = Inf, fill="grey84") +
+    geom_point(all_noOL %>% filter(H2O == "yes"), mapping = aes(color="Baseline"), alpha=.3, size=1)+
+  geom_point(all_noOL %>% filter(H2O == "no", day == 1), mapping = aes(color="1"), alpha=.3, size=1)+
+  geom_point(all_noOL %>% filter(H2O == "no", day == 2), mapping = aes(color="2"), alpha=.3, size=1)+
+  geom_point(all_noOL %>% filter(H2O == "no", day == 3), mapping = aes(color="3"), alpha=.3, size=1)+
+  geom_point(all_noOL %>% filter(H2O == "no", day == 4), mapping = aes(color="4"), alpha=.3, size=1)+
+  geom_smooth(method='gam',se = FALSE, all_noOL %>% filter(H2O == "yes"), mapping = aes(color="Baseline"))+
+  geom_smooth(method='gam',se = FALSE, all_noOL %>% filter(H2O == "no", day == 1), mapping = aes(color="1"))+
+  geom_smooth(method='gam',se = FALSE, all_noOL %>% filter(H2O == "no", day == 2), mapping = aes(color="2"))+
+  geom_smooth(method='gam',se = FALSE, all_noOL %>% filter(H2O == "no", day == 3), mapping = aes(color="3"))+
+  geom_smooth(method='gam',se = FALSE, all_noOL %>% filter(H2O == "no", day == 4), mapping = aes(color="4"))+
+  guides(alpha = "none")+
+  scale_colour_manual(name="experiment day",values=cols2)+
+  labs(y = bquote("EE kJ h"^-1), x = "")+
+  theme_minimal()+
+  facet_wrap(~Sex)
+
+RQ <- ggplot(data = all_noOL %>% filter(H2O == "yes"), aes(x=as.POSIXct(StartTime),y=RQ))+
+  scale_x_datetime(date_breaks = "3 hours", date_labels = "%H:%M")+
+  annotate("rect", xmin = as.POSIXct("1970-01-01 00:00:01", tz="UTC"), 
+           xmax = as.POSIXct("1970-01-01 06:00:00", tz="UTC"), 
+           ymin = -Inf, ymax = Inf, fill="grey84") +
+  annotate("rect", xmin = as.POSIXct("1970-01-01 21:00:00", tz="UTC"), 
+           xmax = as.POSIXct("1970-01-01 23:59:59", tz="UTC"), 
+           ymin = -Inf, ymax = Inf, fill="grey84") +
+    geom_point(all_noOL %>% filter(H2O == "yes"), mapping = aes(color="Baseline"), alpha=.3, size=1)+
+  geom_point(all_noOL %>% filter(H2O == "no", day == 1), mapping = aes(color="1"), alpha=.3, size=1)+
+  geom_point(all_noOL %>% filter(H2O == "no", day == 2), mapping = aes(color="2"), alpha=.3, size=1)+
+  geom_point(all_noOL %>% filter(H2O == "no", day == 3), mapping = aes(color="3"), alpha=.3, size=1)+
+  geom_point(all_noOL %>% filter(H2O == "no", day == 4), mapping = aes(color="4"), alpha=.3, size=1)+
+  geom_smooth(method='gam',se = FALSE, all_noOL %>% filter(H2O == "yes"), mapping = aes(color="Baseline"))+
+  geom_smooth(method='gam',se = FALSE, all_noOL %>% filter(H2O == "no", day == 1), mapping = aes(color="1"))+
+  geom_smooth(method='gam',se = FALSE, all_noOL %>% filter(H2O == "no", day == 2), mapping = aes(color="2"))+
+  geom_smooth(method='gam',se = FALSE, all_noOL %>% filter(H2O == "no", day == 3), mapping = aes(color="3"))+
+  geom_smooth(method='gam',se = FALSE, all_noOL %>% filter(H2O == "no", day == 4), mapping = aes(color="4"))+
+  theme_minimal()+
+  labs(y = bquote("RQ"), x = "hour")+
+  scale_colour_manual(name="experiment day",values=cols2)+ 
+  ylim(0.5, 1.5)+
+  facet_wrap(~Sex)
+
+water/EE/RQ
+save("multi",30, 30, water/EE/RQ)
+save("water",25, 10, water)
+```
+
+```{r}
+all_noOL$day <- as.factor(all_noOL$day)
+all_noOL$Animal_ID <- as.factor(all_noOL$Animal_ID)
+electrolyte_data$Animal_ID <- electrolyte_data$mouse_ID
+
+subset_all_noOL <- all_noOL[,c("Sex","Animal_ID", "H2O")]
+
+split_data <- data.frame(do.call('rbind', strsplit(as.character(all_noOL$StartTime),':',fixed=TRUE)))
+
+all_noOL$day_time <- hours(split_data$X1)+minutes(split_data$X2)+seconds(split_data$X3)
 all_noOL$hour <- round(all_noOL$time_in_S/3600, digits=0)
 
-all_noOL_clean <- all_noOL %>% 
-  separate(StartTime, into = c("Hour", "Minute", "Second"), sep = ":") %>% 
-  mutate(Day = day - 1) %>%
-  mutate(time_period = period(days = Day, hours = Hour, minutes = Minute, seconds = Second)) %>%
-  mutate(Hours = as.numeric(time_period)/3600) %>%
-  mutate(Date = as.POSIXct("2021-01-01") + time_period) %>%
-  select(Date, Day, Hour, Minute, Second, RQ, Sex, EE_kJH, H2Omg, tt)
-  
+stuff <- all_noOL %>% group_by(day,hour, Animal_ID) %>% summarise(H2Og = mean(H2Og))
+sum_H2Og<- setNames(aggregate(stuff$H2Og, list(stuff$Animal_ID), FUN=sum),c("Animal_ID", "total_H2Og"))
+
+sum_H2Og<- distinct(merge(sum_H2Og, subset_all_noOL, by = "Animal_ID"))
+ancova_data<- distinct(merge(sum_H2Og, electrolyte_data, by = c("Animal_ID")))
 
 
+stuff2 <- all_noOL %>% group_by(day,hour, Animal_ID) %>% summarise(EE_kJH = mean(EE_kJH))
+sum_EE_kJH<- setNames(aggregate(stuff2$EE_kJH, list(stuff2$Animal_ID), FUN=sum),c("Animal_ID", "total_EE_kJH"))
+
+sum_EE_kJH<- distinct(merge(sum_EE_kJH, subset_all_noOL, by = "Animal_ID"))
+ancova_data<- distinct(merge(sum_EE_kJH, electrolyte_data, by = c("Animal_ID")))
+
+ancova_data$norm_delta <- ancova_data$total_weight_delta / ancova_data$weight0
+
+mod1 = lm(weight0 ~ total_H2Og, data = ancova_data)
+summary(mod1) 
+plot(ancova_data$total_H2Og,ancova_data$weight0,col = "blue", abline(lm(ancova_data$total_H2Og~ancova_data$weight0)),cex = 1.3,pch = 16)
+
+mod2 = lm(weight0 ~ total_weight_delta, data = ancova_data)
+summary(mod2) 
+plot(ancova_data$total_weight_delta,ancova_data$weight0,col = "blue", abline(lm(ancova_data$total_weight_delta~ancova_data$weight0)),cex = 1.3,pch = 16)
+
+mod3 = lm(weight0 ~ norm_delta, data = ancova_data)
+summary(mod3) 
+plot(ancova_data$norm_delta,ancova_data$weight0,col = "blue", abline(lm(ancova_data$norm_delta~ancova_data$weight0)),cex = 1.3,pch = 16)
+
+mod4 = lm(weight0 ~ total_EE_kJH, data = ancova_data)
+summary(mod4) 
+plot(ancova_data$total_EE_kJH,ancova_data$weight0,col = "blue", abline(lm(ancova_data$total_EE_kJH~ancova_data$weight0)),cex = 1.3,pch = 16)
+```
+
+```{r}
+# 2.  Perform ANOVA with X as Response
+anovaX_mod<-lm(weight0 ~ H2O.x*Sex, ancova_data)
+anova(anovaX_mod)
+
+# 3.  Perform ANOVA with total_H2Og as Response
+anovatotal_H2Og_mod<-lm(total_H2Og ~ H2O.x*Sex, ancova_data)
+anova(anovatotal_H2Og_mod)
+
+# 4.  Test for homogeneity of slopes
+slopes_mod<-lm(total_H2Og ~ H2O.x*Sex + weight0 + H2O.x:weight0, ancova_data)
+anova(slopes_mod)
+
+# 5.  The ANCOVA
+library(car)
+ancova_mod<-lm(total_H2Og ~ H2O.x*Sex + weight0, ancova_data)
+Anova(ancova_mod, type = 2)
+
+# 6.  Find beta and Xmean; then create Z
+summary(ancova_mod)
+mean_val <- mean(ancova_data$weight, na.rm=TRUE)
+ancova_data$Z<-ancova_data$H2Og + 0.002604*(ancova_data$weight - mean_val)
+
+library(emmeans)
+# INTERLUDE:  Comparing means and analyses
+#library(emmeans)
+lima_lsm <- emmeans(ancova_mod, "tt")
+adj_means <- aggregate(ancova_data$Z, list(ancova_data$tt), mean)
+
+anovaZ_mod<-lm(Z ~ tt*Sex, ancova_data)
+anova(anovaZ_mod)
+
+# 7.  Normality of residuals
+anovaZ_mod<-lm(Z ~ H2O*Sex*day, ancova_data)
+ancova_data$anovaZ_resids <- residuals(anovaZ_mod)
+shapiro.test(ancova_data$anovaZ_resids)
+
+# 8.  Homogeneity of variances
+#library(car)
+leveneTest(Z ~ H2O, data = ancova_data)
+
+# 9.  Additivity of main effects
+ancova_data$anovaZ_preds <- predict(anovaZ_mod)
+ancova_data$sq_anovaZ_preds <- ancova_data$anovaZ_preds^2
+tuketotal_H2OgZ_mod<-lm(Z ~ tt + Sex + sq_anovaZ_preds, ancova_data)
+anova(tuketotal_H2OgZ_mod)
+
+# 10.  The ANCOVA, with desired subsequent analysis
+ancova_mod<-lm(H2Og ~ tt*Sex + weight, ancova_data)
+Anova(ancova_mod, ttotal_H2Ogpe = 2)
+
+#Tukey separation of adjusted Sex means
+lima_lsm <- emmeans(ancova_mod, c("Sex","tt"))
+contrast(lima_lsm, method = "pairwise", adjust = "tukey")
+
+emmip(ancova_mod, Sex~tt, CIs=TRUE)
+emmip(ancova_mod, tt~Sex, CIs=TRUE)
+
+```
+
+```{r}
 RQ <- ggplot(data = all_noOL,aes(color = tt, x=as.numeric(day_time),y=RQ))+
   annotate("rect", xmin = 76032, xmax = 107474, ymin = -Inf, ymax = Inf, fill="grey84") +
   annotate("rect", xmin = 162079, xmax = 194341, ymin = -Inf, ymax = Inf, fill="grey84") +
@@ -568,7 +819,7 @@ RQ <- ggplot(data = all_noOL,aes(color = tt, x=as.numeric(day_time),y=RQ))+
 
 
 EE <- ggplot(data = all_noOL,aes(color = tt, x=as.numeric(day_time),y=EE_kJH))+
- annotate("rect", xmin = 76032, xmax = 107474, ymin = -Inf, ymax = Inf, fill="grey84") +
+  annotate("rect", xmin = 76032, xmax = 107474, ymin = -Inf, ymax = Inf, fill="grey84") +
   annotate("rect", xmin = 162079, xmax = 194341, ymin = -Inf, ymax = Inf, fill="grey84") +
   annotate("rect", xmin = 249086, xmax = 280528, ymin = -Inf, ymax = Inf, fill="grey84") +
   scale_color_manual(values=cols, name = "Treatments") +
@@ -577,33 +828,24 @@ EE <- ggplot(data = all_noOL,aes(color = tt, x=as.numeric(day_time),y=EE_kJH))+
   #geom_smooth(method='loess', span=.1, level=0.99)+
   guides(alpha = FALSE)+
   #theme(axis.text.y=element_text(size=12))+
-  scale_x_time()+
+  scale_x_time(breaks = "6 hr")+
   facet_wrap(~Sex)+
   labs(x = "", y = "EE kJ h-1")
 
-#scale_x_datetime(date_labels = "Day %d \n Hour: %H", date_breaks = "6 hours") +
 
-H2Omg_plot <- ggplot(data = all_noOL_clean,aes(color = tt, x=Date,y=H2Og))+
-  annotate("rect", xmin = as.POSIXct("2021-01-01 21:00:00", tz="UTC"),
-           xmax = as.POSIXct("2021-01-02 06:00:00", tz="UTC"),
-           ymin = -Inf, ymax = Inf, fill="grey84") +
-  annotate("rect", xmin = as.POSIXct("2021-01-02 21:00:00", tz="UTC"),
-           xmax = as.POSIXct("2021-01-03 06:00:00", tz="UTC"),ymin = -Inf, 
-           ymax = Inf, fill="grey84") +
-  annotate("rect", xmin = as.POSIXct("2021-01-03 21:00:00", tz="UTC"),
-           xmax = as.POSIXct("2021-01-04 06:00:00", tz="UTC"),ymin = -Inf, 
-           ymax = Inf, fill="grey84") +
-  scale_x_datetime(date_labels = "%H", date_breaks = "4 hours") +
+H2Omg_plot <- ggplot(data = test,aes(color = tt, x= per,y=H2Og))+
+  annotate("rect", xmin = 28800, xmax = 75600, ymin = -Inf, ymax = Inf, fill="grey84") +
+  annotate("rect", xmin = 115200, xmax = 162000, ymin = -Inf, ymax = Inf, fill="grey84") +
+  annotate("rect", xmin = 201600, xmax = 248400, ymin = -Inf, ymax = Inf, fill="grey84") +
   scale_color_manual(values=cols, name = "Treatments") +
   geom_point(alpha = .5)+
   theme_classic()+
   #geom_smooth(method='loess', span=.1, level=0.99)+
   guides(alpha = FALSE)+
-  #theme(axis.text.y=element_text(size=12))+
+  theme(axis.text.y=element_text(size=12))+
   facet_wrap(~Sex)+
-  labs(x = "", y = "RWL g h-1")
-
-
+  scale_x_time() +
+  labs(y = "RWL g h-1", x = "hour")
 
 mean_EE <- ggline(all_noOL, x = "hour", y = "EE_kJH", add = "mean_se",color = "H2O", facet.by = "Sex")+
   stat_compare_means(aes(group = H2O), label = "p.signif",hide.ns = TRUE,label.y = 1)+
@@ -650,6 +892,7 @@ cat(mean(subset_thing$RQ),"+/-",sd(subset_thing$RQ))
 ```{r}
 devtools::install_github("kassambara/ggpubr")
 
+cols <- c("yes"="#0C62AF","no"="#822B0F")
 
 dehydration_data$water<-as.factor(dehydration_data$H2O)
 dehydration_data$hour<-as.numeric(dehydration_data$hour)
@@ -680,20 +923,18 @@ require(pwr)
 
 pwr.anova.test(f=0.4,k=16,n=9,sig.level=0.05)
 
-mean_delta_weight <- ggline(dehydration_data, x = "hour", y = "delta_weight", add = "mean_se",color = "tt", facet.by = "sex")+
+mean_delta_weight <- ggline(dehydration_data, x = "hour", y = "delta_weight", add = "mean_se",color = "water", facet.by = "sex")+
   stat_compare_means(aes(group = H2O), label = "p.signif",hide.ns = TRUE,label.y = .34)+
   scale_color_manual(values=cols, name = "Treatments") +
-  labs(y = "mean delta weight")
+  labs(y = bquote("mean delta weight g day"^-1))
 
-mean_weight <- ggline(dehydration_data, x = "hour", y = "weight", add = "mean_se",color = "tt", facet.by = "sex")+
+mean_weight <- ggline(dehydration_data, x = "hour", y = "weight", add = "mean_se",color = "water", facet.by = "sex")+
   stat_compare_means(aes(group = H2O), label = "p.signif",hide.ns = TRUE,label.y = 22.9)+
   scale_color_manual(values=cols, name = "Treatments") +
-  labs(y = "mean weight (g)")
+  labs(y = "mean weight g")
 
-mean_body_temp/mean_delta_temp
-mean_weight/mean_delta_weight
+mean_weight/mean_delta_weight 
 
-save("temp", 19, 19, mean_body_temp/mean_delta_temp)
 save("weight", 20, 20, mean_weight/mean_delta_weight)
 ```
 
@@ -708,12 +949,14 @@ temp_test2$hour <- as.numeric(temp_test2$hour)
 temp_test2$water <- as.factor(temp_test2$water)
 temp_test2$temp <- as.numeric(temp_test2$temp)
 
-body_temp2 <- ggline(temp_test2, x = "hour", y = "temp", add = "mean_se",color = "tt", facet.by = c("time","sex"))+
-  stat_compare_means(aes(group = water), label = "p.signif",hide.ns = TRUE,label.y = 39)+
+body_temp2 <- ggline(temp_test2, x = "hour", y = "temp", add = "mean_se",color = "water", facet.by = c("time","sex"))+
+  stat_compare_means(aes(group = water), label = "p.format",hide.ns = TRUE,label.y = 39)+
   scale_color_manual(values=cols, name = "Treatments") +
   expand_limits(y=c(NA, 40))+
   labs(y = "mean body temperature (deg C)")+
   facet_grid(time~sex, margins = "time") 
+body_temp2
+
 save("body_temp2", 20, 15, body_temp2)
 
 ```
@@ -721,8 +964,6 @@ save("body_temp2", 20, 15, body_temp2)
 ```{r}
 #remotes::install_github("mjskay/ggblend")
 library(ggblend)
-
-cols2 <- c("Baseline"="navyblue","1"="sienna1","2"="sienna3", "3"="sienna4")
 
 EE <- ggplot(data = all_noOL %>% filter(H2O == "yes"), aes(x=as.POSIXct(StartTime),y=EE_kJH))+
   scale_x_datetime(date_breaks = "2 hours", date_labels = "%H:%M")+
@@ -774,7 +1015,11 @@ RQ <- ggplot(data = all_noOL %>% filter(H2O == "yes"), aes(x=as.POSIXct(StartTim
   facet_wrap(~Sex)+
   scale_colour_manual(name="Dehydration",values=cols2)
 
-water <- ggplot(data = all_noOL %>% filter(H2O == "yes"), aes(x=as.POSIXct(StartTime),y=H2Og))+
+test = subset(all_noOL, all_noOL$day != 0 & all_noOL$time_in_S > 38373 )
+
+all_noOL = all_noOL %>%  filter(!(day == 0 & time_in_S <= 38373))
+
+water <- ggplot(data = test, aes(x=as.POSIXct(StartTime),y=H2Og, color = tt))+
   scale_x_datetime(date_breaks = "2 hours", date_labels = "%H:%M")+
   annotate("rect", xmin = as.POSIXct("1970-01-01 00:00:01", tz="UTC"), 
            xmax = as.POSIXct("1970-01-01 06:00:00", tz="UTC"), 
@@ -782,28 +1027,29 @@ water <- ggplot(data = all_noOL %>% filter(H2O == "yes"), aes(x=as.POSIXct(Start
   annotate("rect", xmin = as.POSIXct("1970-01-01 21:00:00", tz="UTC"), 
            xmax = as.POSIXct("1970-01-01 23:59:59", tz="UTC"), 
            ymin = -Inf, ymax = Inf, fill="grey84") +
-  geom_point(all_noOL %>% filter(H2O == "no", day == 1), mapping = aes(color="1", alpha=0.4))+
-  geom_point(all_noOL %>% filter(H2O == "no", day == 2), mapping = aes(color="2", alpha=0.4))+
-  geom_point(all_noOL %>% filter(H2O == "no", day == 3), mapping = aes(color="3", alpha=0.4))+
-  geom_point(all_noOL %>% filter(H2O == "no", day == 4), mapping = aes(color="4", alpha=0.4))+
-  geom_point(all_noOL %>% filter(H2O == "yes"), mapping = aes(color="Baseline", alpha=0.4))+
   theme_classic()+
-  #ylim(0,2.5) +
-  geom_smooth(all_noOL %>% filter(H2O == "no", day == 1), mapping = aes(color="1", alpha=0.4))+
-  geom_smooth(all_noOL %>% filter(H2O == "no", day == 2), mapping = aes(color="2", alpha=0.4))+
-  geom_smooth(all_noOL %>% filter(H2O == "no", day == 3), mapping = aes(color="3", alpha=0.4))+
-  geom_smooth(all_noOL %>% filter(H2O == "no", day == 4), mapping = aes(color="4", alpha=0.4))+
-  geom_smooth(all_noOL %>% filter(H2O == "yes"), mapping = aes(color="Baseline", alpha=0.4))+
-  labs(x = "", y = "RWL")+
+  geom_point(all_noOL %>% filter(H2O == "yes"), mapping = aes(color="yes", alpha=0.4))+
+  geom_point(all_noOL %>% filter(H2O == "no", day == 0), mapping = aes(color="no:0", alpha=0.4))+
+  geom_point(all_noOL %>% filter(H2O == "no", day == 1), mapping = aes(color="no:1", alpha=0.4))+
+  geom_point(all_noOL %>% filter(H2O == "no", day == 2), mapping = aes(color="no:2", alpha=0.4))+
+  geom_point(all_noOL %>% filter(H2O == "no", day == 3), mapping = aes(color="no:3", alpha=0.4))+
+  geom_smooth(method = "gam",se = FALSE,all_noOL %>% filter(H2O == "yes"), mapping = aes(color="yes", alpha=0.4))+
+  geom_smooth(method = "gam", se = FALSE,all_noOL %>% filter(H2O == "no", day == 0), mapping = aes(color="no:0", alpha=0.4))+
+  geom_smooth(method = "gam", se = FALSE,all_noOL %>% filter(H2O == "no", day == 1), mapping = aes(color="no:1", alpha=0.4))+
+  geom_smooth(method = "gam", se = FALSE,all_noOL %>% filter(H2O == "no", day == 2), mapping = aes(color="no:2", alpha=0.4))+
+  geom_smooth(method = "gam", se = FALSE, all_noOL %>% filter(H2O == "no", day == 3), mapping = aes(color="no:3", alpha=0.4))+
+  labs(x = "", y = "TWL")+
   guides(alpha = "none")+
-  facet_wrap(~Sex)+
-  scale_colour_manual(name="Dehydration",values=cols2)
+  facet_wrap(~Sex) +
+  scale_colour_manual(name="water status",values=cols2)
 water
 
 EE/water/RQ
 save("multi",35, 35, EE/water/RQ)
 
 head(all_noOL$StartTime)
+
+all_combo
 ```
 
 data needed for gamm analysis
@@ -853,36 +1099,37 @@ write.csv(dd, "dd.csv", row.names = FALSE)
 ```{r}
 dd$H2O <- as.factor(dd$H2O)
 dd$days <- as.numeric(dd$day_time)
+dd$day <- as.factor(dd$day)
 
 dd <- dd |>
-    mutate(tt = fct_cross(H2O, Sex))
+    mutate(tt = fct_cross(H2O, day))
 all_combo<-unique(dd$tt)
 ```
 
 ```{r}
-M2_v1 <- bam(H2Og ~ H2O * Sex + s(days, by=tt, bs='cc',k=20)  + s(time_in_D,by=tt, bs="cr",k=40), data = dd, random = list(startexp = ~1, Animal_ID = ~1|startexp), method="REML")
+M2_v1 <- bam(H2Og ~ H2O * Sex + day + s(time_in_D,by=tt, bs="cr",k=70), data = dd, random = list(startexp = ~1, Animal_ID = ~1|startexp), method="REML")
 
-M2_v2 <- bam(H2Og ~ H2O * Sex + s(days, time_in_D, by=tt,k=70), data = dd, random = list(startexp = ~1, Animal_ID = ~1|startexp), method="REML")
+M2_v2 <- bam(H2Og ~ H2O * Sex + s(day, day_time, by=tt,k=70), data = dd, random = list(startexp = ~1, Animal_ID = ~1|startexp), method="REML")
 
 AIC(M2_v1, M2_v2)
 
 #if the data is big change to bs = 'cr'
 #to determine if K has been set too low.
-gam.check(M2_v2)
+gam.check(M2_v1)
 
-summary(M2_v2)  
+summary(M2_v1)  
 
-draw(M2_v2, residuals = TRUE, scales = "fixed")
+draw(M2_v2)
 plot(M2_v2, page = 1, scheme = 2, shade =T)
 plot(M2_v2, scheme = 2)
-vis.gam(M2_v2, view = c("days", "time_in_D"),theta = 50, n.grid = 50, lwd = 0.4)
+vis.gam(M2_v2, view = c("day", "days"),theta = 50, n.grid = 50, lwd = 0.4)
 
 #yellow = larger predictions
 #red = smaller predictions
     
 vis.gam(M2_v2, theta = 120, n.grid = 50, lwd = 0.4)
 
-ds1 <- data_slice(M2, days = evenly(days, n = 100),
+ds1 <- data_slice(M2, time_in_D = evenly(time_in_D, n = 86400),
     H2O = level(H2O, "no"), Sex = level(Sex, "Female"),tt = level(tt, "no:Female"))
 
 fv1 <- fitted_values(M2, data = ds1, scale = "response")
@@ -931,8 +1178,8 @@ fitted_values(M2, data = ds2, scale = "response")|>
 #all the curves :)
 ###############################
 
-ds4 <- data_slice(M2_v2, days = evenly(days, n = 100),
-                  tt = c("no:Male", "yes:Male", "yes:Female", "no:Female"))
+ds4 <- data_slice(M2_v1, time_in_D = evenly(time_in_D, n = 100),
+                  tt = c("yes:1", "yes:2", "yes:3", "yes:4", "no:1",  "no:2",  "no:3",  "no:4" ))
 
 #cols <- c("1"="#1E837E","2"="#C7730B","3"="#AF5548", "4"="#6F4242", "Baseline" = "#80858E")
 
@@ -940,22 +1187,35 @@ ds4 <- data_slice(M2_v2, days = evenly(days, n = 100),
 
 dd$fz <- as.factor(dd$tt)
 
-RWL_gam <- fitted_values(M2_v2, data = ds4) |>
+RWL_gam <- fitted_values(M2_v1, data = ds4) |>
   mutate(fz = factor(tt)) |>
   ggplot(aes(x = days, y = fitted, colour = fz, group = fz)) +
   annotate("rect", xmin = 76032, xmax = 107474, ymin = -Inf, ymax = Inf, fill="grey84") +
   annotate("rect", xmin = 162079, xmax = 194341, ymin = -Inf, ymax = Inf, fill="grey84") +
   annotate("rect", xmin = 249086, xmax = 280528, ymin = -Inf, ymax = Inf, fill="grey84") +
-  #geom_point(data=dd, aes(y=H2Omg, alpha = 0.1))+
-  geom_ribbon(aes(ymin = lower, ymax = upper, fill = fz, colour = NULL),alpha = 0.2) +
+  geom_point(data = dd,
+        mapping = aes(y = H2Og, colour = fz),
+        alpha = 0.8) +
+  annotate("rect", xmin = as.POSIXct("1970-01-01 00:00:01", tz="UTC"), 
+           xmax = as.POSIXct("1970-01-01 06:00:00", tz="UTC"), 
+           ymin = -Inf, ymax = Inf, fill="grey84") +
+  annotate("rect", xmin = as.POSIXct("1970-01-01 21:00:00", tz="UTC"), 
+           xmax = as.POSIXct("1970-01-01 23:59:59", tz="UTC"), 
+          ymin = -Inf, ymax = Inf, fill="grey84") +
+  #geom_ribbon(aes(ymin = lower, ymax = upper, fill = fz, colour = NULL),alpha = 0.2) +
   geom_line()+
   scale_x_time()+
-  scale_colour_manual(name="Treatments",values=cols)+
-  scale_fill_manual(name="Treatments",values=cols)+
-  theme_classic()
+  #ylim(0, 0.35)+
+  #scale_colour_manual(name="Treatments",values=cols)+
+  #scale_fill_manual(name="Treatments",values=cols)+
+  #theme_classic()+
+  #coord_polar() +
+  theme_minimal()+
+  scale_color_viridis_d()
+  
+RWL_gam
 
-
-H2Omg_plot/RWL_gam
+water/RWL_gam
 ```
 
 
